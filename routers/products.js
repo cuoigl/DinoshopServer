@@ -64,8 +64,9 @@ router.post("/", uploadOptions.single("image"), async (req, res) => {
   const file = req.file;
   if (!file) return res.status(400).send("No image in the request");
 
-  const fileName = req.file.fieldname;
-  const basePath = `${req.protocol}://${req.get("host")}/public/upload/`;
+  const fileName = file.filename;
+
+  const basePath = `${req.protocol}://${req.get("host")}/public/uploads/`;
 
   let product = new Product({
     name: req.body.name,
@@ -102,8 +103,8 @@ router.put("/:id", uploadOptions.single("image"), async (req, res) => {
   let imagepath;
 
   if (file) {
-    const fileName = file.fieldname;
-    const basePath = `${req.protocol}://${req.get("host")}/public/upload/`;
+    const fileName = file.filename;
+    const basePath = `${req.protocol}://${req.get("host")}/public/uploads/`;
     imagepath = `${basePath}/${fileName}`;
   } else {
     imagepath = product.image;
@@ -182,7 +183,7 @@ router.put(
 
     const files = req.files;
     let imagesPaths = [];
-    const basePath = `${req.protocol}://${req.get("host")}/public/upload/`;
+    const basePath = `${req.protocol}://${req.get("host")}/public/uploads/`;
 
     if (files) {
       files.map((file) => {
