@@ -34,9 +34,9 @@ const uploadOptions = multer({ storage: storage });
 
 // http://localhost:3000/api/v1/products
 // localhost:3000/api/v1/products?categories=2342342,234234
-router.get("/", async (req, res) => {
+router.get(`/`, async (req, res) => {
   let filter = {};
-  if (req.query.category) {
+  if (req.query.categories) {
     filter = { category: req.query.categories.split(",") };
   }
 
