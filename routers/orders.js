@@ -48,8 +48,8 @@ router.post("/", async (req, res) => {
 
   const totalPrices = await Promise.all(
     orderItemsIdsResolved.map(async (orderItemId) => {
-      const orderItem = await OrderItem.findById(orderItemId).populated(
-        "productId",
+      const orderItem = await OrderItem.findById(orderItemId).populate(
+        "product",
         "price"
       );
       const totalPrice = orderItem.product.price * orderItem.quantity;
@@ -75,7 +75,7 @@ router.post("/", async (req, res) => {
 
   if (!order) return res.status(404).send("The order cannot be created");
 
-  res.send(order);
+  res.status(200).send(order);
 });
 
 router.put("/:id", async (req, res) => {
