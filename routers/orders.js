@@ -20,7 +20,7 @@ router.get("/", async (req, res) => {
 
 router.get("/:id", async (req, res) => {
   if (!mongoose.isValidObjectId(req.params.id)) {
-    res.status(400).send("Invalid Order Id");
+    return res.status(400).send("Invalid Order Id");
   }
   const order = await Order.findById(req.params.id)
     .populate("user", "name")
@@ -85,7 +85,7 @@ router.post("/", async (req, res) => {
 
 router.put("/:id", async (req, res) => {
   if (!mongoose.isValidObjectId(req.params.id)) {
-    res.status(400).send("Invalid Order Id");
+    return res.status(400).send("Invalid Order Id");
   }
   const order = await Order.findByIdAndUpdate(
     req.params.id,
@@ -102,7 +102,7 @@ router.put("/:id", async (req, res) => {
 
 router.delete("/:id", (req, res) => {
   if (!mongoose.isValidObjectId(req.params.id)) {
-    res.status(400).send("Invalid Product Id");
+    return res.status(400).send("Invalid Product Id");
   }
   Order.findByIdAndRemove(req.params.id)
     .then(async (order) => {

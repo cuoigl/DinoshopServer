@@ -50,7 +50,7 @@ router.get(`/`, async (req, res) => {
 
 router.get("/:id", async (req, res) => {
   if (!mongoose.isValidObjectId(req.params.id)) {
-    res.status(400).send("Invalid Product Id");
+    return res.status(400).send("Invalid Product Id");
   }
   const product = await Product.findById(req.params.id).populate("category");
 
@@ -94,7 +94,7 @@ router.post("/", uploadOptions.single("image"), async (req, res) => {
 
 router.put("/:id", uploadOptions.single("image"), async (req, res) => {
   if (!mongoose.isValidObjectId(req.params.id)) {
-    res.status(400).send("Invalid Product Id");
+    return res.status(400).send("Invalid Product Id");
   }
   const category = await Category.findById(req.body.category);
   if (!category) return res.status(400).send("Invalid Category");
