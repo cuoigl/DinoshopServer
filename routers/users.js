@@ -5,6 +5,8 @@ const router = express.Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
+const mongoose = require("mongoose");
+
 // http://localhost:3000/api/v1/products
 router.get("/", async (req, res) => {
   const userList = await User.find().select("-passwordHash");
@@ -16,6 +18,9 @@ router.get("/", async (req, res) => {
 });
 
 router.get("/:id", async (req, res) => {
+  if (!mongoose.isValidObjectId(req.params.id)) {
+    res.status(400).send("Invalid User Id");
+  }
   const user = await User.findById(req.params.id).select("-passwordHash");
 
   if (!user) {
@@ -67,6 +72,9 @@ router.post("/register", async (req, res) => {
 });
 
 router.put("/:id", async (req, res) => {
+  if (!mongoose.isValidObjectId(req.params.id)) {
+    res.status(400).send("Invalid User Id");
+  }
   const userExist = await User.findById(req.params.id);
   let newPassword;
   if (req.body.password) {
@@ -124,6 +132,9 @@ router.post("/login", async (req, res) => {
 });
 
 router.delete("/:id", (req, res) => {
+  if (!mongoose.isValidObjectId(req.params.id)) {
+    res.status(400).send("Invalid User Id");
+  }
   User.findByIdAndRemove(req.params.id)
     .then((user) => {
       if (user) {

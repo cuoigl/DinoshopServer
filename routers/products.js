@@ -49,6 +49,9 @@ router.get(`/`, async (req, res) => {
 });
 
 router.get("/:id", async (req, res) => {
+  if (!mongoose.isValidObjectId(req.params.id)) {
+    res.status(400).send("Invalid Product Id");
+  }
   const product = await Product.findById(req.params.id).populate("category");
 
   if (!product) {
@@ -135,6 +138,9 @@ router.put("/:id", uploadOptions.single("image"), async (req, res) => {
 });
 
 router.delete("/:id", (req, res) => {
+  if (!mongoose.isValidObjectId(req.params.id)) {
+    res.status(400).send("Invalid Product Id");
+  }
   Product.findByIdAndRemove(req.params.id)
     .then((product) => {
       if (product) {

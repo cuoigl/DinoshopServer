@@ -4,6 +4,8 @@ const { OrderItem } = require("../models/order-item");
 const express = require("express");
 const router = express.Router();
 
+const mongoose = require("mongoose");
+
 // http://localhost:3000/api/v1/orders
 router.get("/", async (req, res) => {
   const orderList = await Order.find()
@@ -17,6 +19,9 @@ router.get("/", async (req, res) => {
 });
 
 router.get("/:id", async (req, res) => {
+  if (!mongoose.isValidObjectId(req.params.id)) {
+    res.status(400).send("Invalid Order Id");
+  }
   const order = await Order.findById(req.params.id)
     .populate("user", "name")
     .populate({
@@ -29,20 +34,6 @@ router.get("/:id", async (req, res) => {
   }
   res.send(order);
 });
-
-// router.get("/:id", async (req, res) => {
-//   try {
-//     const order = await Order.findOne({ _id: req.params.id })
-//       .populate("user", "name")
-//       .populate({
-//         path: "orderItems",
-//         populate: { path: "product", populate: "category" },
-//       });
-//     res.status(200).json(order);
-//   } catch (err) {
-//     res.status(500).json({ error: err });
-//   }
-// });
 
 router.post("/", async (req, res) => {
   const orderItemsIds = Promise.all(
@@ -93,6 +84,9 @@ router.post("/", async (req, res) => {
 });
 
 router.put("/:id", async (req, res) => {
+  if (!mongoose.isValidObjectId(req.params.id)) {
+    res.status(400).send("Invalid Order Id");
+  }
   const order = await Order.findByIdAndUpdate(
     req.params.id,
     {
@@ -107,6 +101,9 @@ router.put("/:id", async (req, res) => {
 });
 
 router.delete("/:id", (req, res) => {
+  if (!mongoose.isValidObjectId(req.params.id)) {
+    res.status(400).send("Invalid Product Id");
+  }
   Order.findByIdAndRemove(req.params.id)
     .then(async (order) => {
       if (order) {
