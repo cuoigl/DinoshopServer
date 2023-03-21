@@ -30,6 +30,20 @@ router.get("/:id", async (req, res) => {
   res.send(order);
 });
 
+// router.get("/:id", async (req, res) => {
+//   try {
+//     const order = await Order.findOne({ _id: req.params.id })
+//       .populate("user", "name")
+//       .populate({
+//         path: "orderItems",
+//         populate: { path: "product", populate: "category" },
+//       });
+//     res.status(200).json(order);
+//   } catch (err) {
+//     res.status(500).json({ error: err });
+//   }
+// });
+
 router.post("/", async (req, res) => {
   const orderItemsIds = Promise.all(
     req.body.orderItems.map(async (orderItem) => {
